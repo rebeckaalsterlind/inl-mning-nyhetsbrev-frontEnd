@@ -12,11 +12,11 @@ const root = document.querySelector("#root");
 
 //TEMPLATES
 const logInTemp = `
-<form>
+<div>
 <input type="text" id="username" name="username" placeholder="Username">
-<input type="password" id="pwd" name="pwd" placeholder="Password">
-<input type="submit" value="Log in" id="sendLogIn">
-</form>`;
+<input type="password" id="password" name="pwd" placeholder="Password">
+<button id="logInBtn">Log in</button>
+</div>`;
 
 
 //VUE FUNCTIONS
@@ -46,3 +46,28 @@ function register(){
 
 // REG BUTTON SEND TO REG FORM
 document.querySelector("#regBtn").addEventListener("click", () => register());
+
+// LOG IN CHECK IF USER EXISTS => SEND ID BACK
+document.querySelector("#logInBtn").addEventListener("click", () => {
+    let userName = document.querySelector("#username").value;
+    let passWord = document.querySelector("#password").value;
+    //if(userName != "" || passWord != ""){
+        let checkUser = {username: userName, password: passWord};
+    console.log(checkUser)
+        fetch("http://localhost:3050/users/login", {
+            method: "post", 
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkUser)
+        })
+        .then(res => res.json())
+        .then(data => localStorage.setItem('currentUser', JSON.stringify(data)));
+        
+        document.querySelector("#username").value = ""; 
+        document.querySelector("#password").value = ""; 
+
+    // };
+
+
+});
