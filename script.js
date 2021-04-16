@@ -11,63 +11,105 @@ const headerAside = document.querySelector("#headerAside");
 const root = document.querySelector("#root");
 
 //TEMPLATES
-const logInTemp = `
+const regHeadTemp = `
 <div>
-<input type="text" id="username" name="username" placeholder="Username">
-<input type="password" id="password" name="pwd" placeholder="Password">
-<button id="logInBtn">Log in</button>
+    <input type="text" id="username" name="username" placeholder="Username" autocomplete="on">
+    <input type="password" id="password" name="password" placeholder="Password" autocomplete="on">
+    <input type="submit" value="Log in" id="logInBtn">
 </div>`;
+const regMainTemp = `<div><h1>form to register</h1></div>`;
 
+const loggedOutHeadTemp = `<div><button id="regBtn">Register</button></div>` + regHeadTemp;
+const loggedOutMainTemp = `<div><h1>log in to access your account</h1></div>`;
 
-//VUE FUNCTIONS
-function loggedOut(){
-    headerAside.insertAdjacentHTML("beforeend", `
-    <div><button id="regBtn">Register</button></div>` + logInTemp
-    );
-};
+const loggedInHeadTemp = `<div><button id="logOutBtn">Log out</button></div>`;
+const loggedInMainTemp = `<div><h1>Welcome</h1></div>`;
 
-function loggedIn() {
-    headerAside.innerHTML = ""
-    headerAside.insertAdjacentHTML("beforeend", `<button>Logga ut</button>`);
-    root.innerHTML = "";
-    root.insertAdjacentHTML("beforeend", `<div><h1>logged in</h1></div>`);
-};
-
-function register(){
-    headerAside.innerHTML = "";
-    headerAside.insertAdjacentHTML("beforeend", logInTemp);
-
-    root.innerHTML = "";
-    root.insertAdjacentHTML("beforeend", `<div><h1>reg form</h1></div>`);
-}
 
 //SET VIEW BASED ON CURRENTUSER IN LS TRUE/FALSE
 (!localStorage.getItem("currentUser")) ? loggedOut() : loggedIn();
 
-// REG BUTTON SEND TO REG FORM
-document.querySelector("#regBtn").addEventListener("click", () => register());
+
+//VUE FUNCTIONS
+function loggedIn() {
+    headerAside.innerHTML = ""
+    headerAside.insertAdjacentHTML("beforeend", loggedInHeadTemp);
+    
+    root.innerHTML = "";
+    root.insertAdjacentHTML("beforeend", loggedInMainTemp);
+
+    document.querySelector("#logOutBtn").addEventListener("click", function() {
+        console.log('click');
+        // localStorage.clear();
+        localStorage.removeItem('currentUser');
+        loggedOut();
+    });
+
+};
+
+function loggedOut() {
+    headerAside.innerHTML = ""
+    headerAside.insertAdjacentHTML("beforeend", loggedOutHeadTemp);
+    
+    root.innerHTML = "";
+    root.insertAdjacentHTML("beforeend", loggedOutMainTemp);
+
+    document.querySelector("#regBtn").addEventListener("click", () => register());
+    
+    document.querySelector("#logInBtn").addEventListener("click", () => {
+
+        let userName = document.querySelector("#username").value;
+        let passWord = document.querySelector("#password").value;
+        //if(userName != " " || passWord != " "){
+            let checkUser = {username: userName, password: passWord};
+            fetch("http://localhost:3050/users/login", {
+                method: "post", 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(checkUser)
+            })
+            .then(res => res.json())
+            .then(data => {
+                localStorage.setItem('currentUser', JSON.stringify(data.id))
+                loggedIn();
+            });
+            
+            
+        // } else {
+        // register();
+        // };
+    
+    });
+
+};
+
+function register() {
+    headerAside.innerHTML = ""
+    headerAside.insertAdjacentHTML("beforeend", regHeadTemp);
+    
+    root.innerHTML = "";
+    root.insertAdjacentHTML("beforeend", regMainTemp);
+
+};
+
+
+    
+    
+    
+    
+    
+    
+
+
+  
 
 // LOG IN CHECK IF USER EXISTS => SEND ID BACK
-document.querySelector("#logInBtn").addEventListener("click", () => {
-    let userName = document.querySelector("#username").value;
-    let passWord = document.querySelector("#password").value;
-    //if(userName != "" || passWord != ""){
-        let checkUser = {username: userName, password: passWord};
-    console.log(checkUser)
-        fetch("http://localhost:3050/users/login", {
-            method: "post", 
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(checkUser)
-        })
-        .then(res => res.json())
-        .then(data => localStorage.setItem('currentUser', JSON.stringify(data)));
-        
-        document.querySelector("#username").value = ""; 
-        document.querySelector("#password").value = ""; 
-
-    // };
 
 
-});
+// REG BUTTON SEND TO REG FORM
+
+
+// LOG OUT BUTTON CLEARS LS SEND TO LOG OUT PAGE    
+
+
