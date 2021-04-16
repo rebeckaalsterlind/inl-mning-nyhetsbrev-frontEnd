@@ -18,17 +18,14 @@ header {
     height: 80px;
     z-index: 2;
     background-color: rgb(94, 120, 138);
-    border: 1px solid yellow;
 }
 
 header > section {
     flex: 20%;
-    border: 1px solid green;
 }
 
 header > aside {
     flex: 80%;
-    border: 1px solid red;
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-end;
