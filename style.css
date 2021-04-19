@@ -40,10 +40,24 @@ main {
     align-items: center;
 }
 
-#root {
+.root {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 80%;
-    width: 50%;
+    width: 100%;
+    border: 1px solid red;
+}
+
+.root > aside {
+    flex: 15%;
+    border: 2px solid green;
+}
+
+#loggedInMain {
+    flex: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid green;
 }
