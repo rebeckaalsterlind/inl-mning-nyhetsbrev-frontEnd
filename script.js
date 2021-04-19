@@ -8,6 +8,7 @@
  const headerAside = document.querySelector("#headerAside");
  const main = document.querySelector("#main");
 
+ document.querySelector("#logo").addEventListener("click", () => setVue());
 
  //////TEMPLATES
  //REGISTER
@@ -50,15 +51,18 @@
 </section`;
 
 
-
+setVue();
 
  //SET VIEW BASED ON CURRENTUSER IN LS TRUE/FALSE
- if (!localStorage.getItem("currentUser")) {
+ function setVue() {
+     if (!localStorage.getItem("currentUser")) {
      loggedOut()
- } else {
-     let user = JSON.parse(localStorage.getItem('currentUser'));
-     loggedIn(user.username);
- }
+    } else {
+        let user = JSON.parse(localStorage.getItem('currentUser'));
+        loggedIn(user.username);
+    }
+ };
+ 
 
 
  //////VUE FUNCTIONS
@@ -126,7 +130,10 @@
                     })
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data)
+                        main.innerHTML = "";
+                        let result;
+                        (data) ? result = "now" : result = "no longer";
+                        main.insertAdjacentHTML("beforeend", `<p>You are ${result} subscribing to the newsletter</p>`)
                     });
                  });
              });
