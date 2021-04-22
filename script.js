@@ -92,10 +92,10 @@ function loggedIn(username) {
 
     document.querySelector("#userDetails").addEventListener("click", () => {
         let user = JSON.parse(localStorage.getItem('currentUser'));
-        console.log(user);
         const id = {
-            id: user.id
+            id: user._id
         }
+        console.log('id', id);
         fetch("http://localhost:3050/users/myAccount", {
                 method: "post",
                 headers: {
@@ -108,18 +108,18 @@ function loggedIn(username) {
     
                 main.innerHTML = "";
                 main.insertAdjacentHTML("beforeend", `<p>Username: ${data.username}</p>
-            <p>Firstname: ${data.firstname}</p>
-            <p>Lastname: ${data.lastname}</p>
-            <p>Email: ${data.email}</p>
-            <p>Subscribe to newletter: ${(data.subscribe) ? "<input id='checkbox' type='checkbox' checked/>" : "<input id='checkbox' type='checkbox'/>"} </p>
-            <button id="changeSub">Save</button>`);
+                    <p>Firstname: ${data.firstname}</p>
+                    <p>Lastname: ${data.lastname}</p>
+                    <p>Email: ${data.email}</p>
+                    <p>Subscribe to newletter: ${(data.subscribe) ? "<input id='checkbox' type='checkbox' checked/>" : "<input id='checkbox' type='checkbox'/>"} </p>
+                    <button id="changeSub">Save</button>`);
 
                 document.querySelector("#changeSub").addEventListener("click", (data) => {
                     console.log("data", data)
                 let user = JSON.parse(localStorage.getItem('currentUser'));
             
                 let updateNL;
-                (document.querySelector("#checkbox").checked) ? updateNL = {id: user.id, subscribe: true} : updateNL = {id: user.id, subscribe: false};
+                (document.querySelector("#checkbox").checked) ? updateNL = {id: user._id, subscribe: true} : updateNL = {id: user._id, subscribe: false};
                 console.log('update', updateNL);
             
                     fetch("http://localhost:3050/users/newsletter", {
@@ -153,14 +153,14 @@ function loggedOut() {
 
     document.querySelector("#logInBtn").addEventListener("click", () => {
 
-        let userName = document.querySelector("#username").value;
-        let passWord = document.querySelector("#password").value;
+        let username = document.querySelector("#username").value;
+        let password = document.querySelector("#password").value;
 
-        if (userName != "" || passWord != "") {
+        if (username != "" || password != "") {
 
             let checkUser = {
-                username: userName,
-                password: passWord
+                username: username,
+                password: password
             };
 
             fetch("http://localhost:3050/users/login", {
@@ -222,10 +222,11 @@ function register() {
              })
              .then(res => res.json())
              .then(data => {
+                 console.log(data)
                 localStorage.setItem('currentUser', JSON.stringify(data));
                 loggedIn(data.username);
             });  
-            
+
         }; 
     });
  };
