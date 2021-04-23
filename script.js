@@ -6,7 +6,8 @@ const main = document.querySelector("#main");
 
 document.querySelector("#logo").addEventListener("click", () => setVue());
 
-//////TEMPLATES
+//TEMPLATES =>
+
 //REGISTER
 const regHeadTemp = `
 <section>
@@ -49,13 +50,14 @@ const loggedInMainTemp = `
     <aside></aside> 
 </section`;
 
-///////////////////
 
+
+
+//SET VUE BASED ON LOCALSTORAGE ON RELOAD/ENTER OF SITE
 setVue();
 
 //SET VIEW BASED ON CURRENTUSER IN LS TRUE/FALSE
 function setVue() {
-    
     if(!localStorage.getItem("currentUser")) {
         loggedOut()
     } else {
@@ -66,9 +68,10 @@ function setVue() {
 
 
 
- //////VUE FUNCTIONS
 
- //VUE
+//VUE FUNCTIONS =>
+
+ //VUE TEMPLATE
 function vue(headTemp, mainTemp) {
     headerAside.innerHTML = ""
     main.innerHTML = "";
@@ -77,7 +80,7 @@ function vue(headTemp, mainTemp) {
 };
 
 
- // LOGGED IN
+ // IF USER IS LOGGED IN
 function loggedIn(username) {
     headerAside.innerHTML = ""
     headerAside.insertAdjacentHTML("beforeend", `<div>${username} ` + loggedInHeadTemp);
@@ -85,81 +88,77 @@ function loggedIn(username) {
     main.innerHTML = "";
     main.insertAdjacentHTML("beforeend", loggedInMainTemp);
 
+    //CLICK LOG OUT BTN => CLEARS LOCALSTORAGE
     document.querySelector("#logOutBtn").addEventListener("click", function () {
         localStorage.removeItem('currentUser');
         loggedOut();
     });
-
+    //CLICK USERDETAILS => SENDS ID TO SERVER
     document.querySelector("#userDetails").addEventListener("click", () => {
+       
         let user = JSON.parse(localStorage.getItem('currentUser'));
         const id = {
             id: user._id
         }
-        console.log('id', id);
+    
         fetch("https://newsletter-with-mongo.herokuapp.com/users/myAccount", {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(id)
-            })
-            .then(res => res.json())
-            .then(data => {
-                const loggedInMain = document.querySelector("#loggedInMain");
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(id)
+        })
+        .then(res => res.json())
+        .then(data => {
+            //PRINT DATA
+            const loggedInMain = document.querySelector("#loggedInMain");
+            loggedInMain.innerHTML = "";
+            loggedInMain.insertAdjacentHTML("beforeend", `
+            <div class="main-wrapper">
+                <p><span class="bold">Username: </span>${data.username}</p>
+                <p><span class="bold">Firstname: </span>${data.firstname}</p>
+                <p><span class="bold">Lastname: </span>${data.lastname}</p>
+                <p><span class="bold">Email: </span>${data.email}</p>
+                <p><span class="bold">Subscribe to newletter: </span>${(data.subscribe) ? "<input id='checkbox' type='checkbox' checked/>" : "<input id='checkbox' type='checkbox'/>"} </p>
+                <button id="changeSub" class="button">Save</button>
+            </div>`);
+            
+            //CHANGE SUBSCRIPTION PREFERENCES
+            document.querySelector("#changeSub").addEventListener("click", (data) => {
 
-                loggedInMain.innerHTML = "";
-                loggedInMain.insertAdjacentHTML("beforeend", `
-                <div class="main-wrapper">
-                    <p><span class="bold">Username: </span>${data.username}</p>
-                    <p><span class="bold">Firstname: </span>${data.firstname}</p>
-                    <p><span class="bold">Lastname: </span>${data.lastname}</p>
-                    <p><span class="bold">Email: </span>${data.email}</p>
-                    <p><span class="bold">Subscribe to newletter: </span>${(data.subscribe) ? "<input id='checkbox' type='checkbox' checked/>" : "<input id='checkbox' type='checkbox'/>"} </p>
-                    <button id="changeSub" class="button">Save</button>
-                </div>`);
-
-                document.querySelector("#changeSub").addEventListener("click", (data) => {
-                    console.log("data", data)
                 let user = JSON.parse(localStorage.getItem('currentUser'));
             
                 let updateNL;
                 (document.querySelector("#checkbox").checked) ? updateNL = {id: user._id, subscribe: true} : updateNL = {id: user._id, subscribe: false};
-                console.log('update', updateNL);
-            
-                    fetch("https://newsletter-with-mongo.herokuapp.com/users/newsletter", {
-                    method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(updateNL)
+        
+                fetch("https://newsletter-with-mongo.herokuapp.com/users/newsletter", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updateNL)
                 })
                 .then(res => res.json())
                 .then(data => {
                     loggedInMain.innerHTML = "";
                     let result;
                     (data) ? result = "now" : result = "no longer";
-                    loggedInMain.insertAdjacentHTML("beforeend", `<p>You are ${result} subscribing to the newsletter</p>`)
-                });
+                    loggedInMain.insertAdjacentHTML("beforeend", `<p>You are ${result} subscribing to the newsletter</p>`);
                 });
             });
+        });
     });
-
-
 };
-
 
 
 //LOGGED OUT
 function loggedOut() {
     vue(loggedOutHeadTemp, loggedOutMainTemp);
-
     document.querySelector("#regBtn").addEventListener("click", () => register());
-
     document.querySelector("#logInBtn").addEventListener("click", () => runLogIn());
-
 };
 
-//REGISTER
+//REGISTER NEW ACCOUNT
 function register() {
     vue(regHeadTemp, regMainTemp);
 
@@ -167,54 +166,55 @@ function register() {
     
         evt.preventDefault();
         let validation = true;
-         
+        //CHECK IF ALL FIELDS ARE FILLED 
         validateForm("regUN");
         validateForm("firstname");
         validateForm("lastname");
         validateForm("email");
         validateForm("regPW");
-
+        
+        //IF SO => SEND VALUES TO SERVER
         if(validation) {
            
             let regUser = {
-                    username: document.querySelector("#regUN").value,
-                    firstname: document.querySelector("#firstname").value,
-                    lastname: document.querySelector("#lastname").value,
-                    email: document.querySelector("#email").value,
-                    password: document.querySelector("#regPW").value,
-                    subscribe: document.querySelector("#checkbox").checked
-                };
-            
-                
-
+                username: document.querySelector("#regUN").value,
+                firstname: document.querySelector("#firstname").value,
+                lastname: document.querySelector("#lastname").value,
+                email: document.querySelector("#email").value,
+                password: document.querySelector("#regPW").value,
+                subscribe: document.querySelector("#checkbox").checked
+            };
+              
             fetch("https://newsletter-with-mongo.herokuapp.com/users/createAccount", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
-                 },
+                },
                 body: JSON.stringify(regUser)
-             })
-             .then(res => res.json())
-             .then(data => {
+            })
+            .then(res => res.json())
+            .then(data => {
                 if(data == "Email" || data == "Username") {
                     console.log("email")
                     document.querySelector("#error").innerHTML = `<p>${data} is unavailable</p>`;
                 }else {
                     localStorage.setItem('currentUser', JSON.stringify(data));
                     loggedIn(data.username);  
-                }
-                
+                };
             });  
-
         }; 
     });
 
     document.querySelector("#logInBtn").addEventListener("click", () => runLogIn());
 
- };
+};
 
 
- //FEATURES FUNCTIONS
+
+
+//FEATURES FUNCTIONS
+
+//CHECK IF USER IS REGISTERED
 function runLogIn() {
     let username = document.querySelector("#username").value;
     let password = document.querySelector("#password").value;
@@ -227,39 +227,37 @@ function runLogIn() {
         };
 
         fetch("https://newsletter-with-mongo.herokuapp.com/users/login", {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(checkUser)
-            })
-            .then(res => res.json())
-            .then(data => {
-                localStorage.setItem('currentUser', JSON.stringify(data))
-                loggedIn(data.username);
-            });
-
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkUser)
+        })
+        .then(res => res.json())
+        .then(data => {
+            localStorage.setItem('currentUser', JSON.stringify(data))
+            loggedIn(data.username);
+        });
 
     } else {
         redBorder("#password");
         redBorder("#username");
-        
     };
-}
+};
 
-
+//GIVE INPUT FIELD RED BORDER WHEN ERROR
 function redBorder(selector) {
     document.querySelector(selector).style.border = "1px solid red";
-} 
+}; 
 
+//CHECK IF INPUT FIELDS ARE EMPTY
 function validateForm(target) {
     let inputValue = document.forms["regForm"][target].value;
     if (inputValue == "") {
         validation = false;
         redBorder(`#${target}`);
-        console.log(validation)
-    } 
-}
+    }; 
+};
 
 
 
