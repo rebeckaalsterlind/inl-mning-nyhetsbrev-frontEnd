@@ -1,8 +1,4 @@
-// och ändra sin prenumerationsstatus.
-// En registrerad användare skall kunna logga in på frontend applikationen 
-// och där kunna ändra sin prenumerationsstatus.
-// Nya användare får randomiserade nycklar som indentifierar dem.
-// Lösenorden som sparas skall vara krypterade.
+
 
 const header = document.querySelector("header");
 const headerAside = document.querySelector("#headerAside");
@@ -100,7 +96,7 @@ function loggedIn(username) {
             id: user._id
         }
         console.log('id', id);
-        fetch("http://localhost:3050/users/myAccount", {
+        fetch("https://newsletter-with-mongo.herokuapp.com/users/myAccount", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -130,7 +126,7 @@ function loggedIn(username) {
                 (document.querySelector("#checkbox").checked) ? updateNL = {id: user._id, subscribe: true} : updateNL = {id: user._id, subscribe: false};
                 console.log('update', updateNL);
             
-                    fetch("http://localhost:3050/users/newsletter", {
+                    fetch("https://newsletter-with-mongo.herokuapp.com/users/newsletter", {
                     method: "post",
                     headers: {
                         "Content-Type": "application/json",
@@ -191,7 +187,7 @@ function register() {
             
                 
 
-            fetch("http://localhost:3050/users/createAccount", {
+            fetch("https://newsletter-with-mongo.herokuapp.com/users/createAccount", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -230,7 +226,7 @@ function runLogIn() {
             password: password
         };
 
-        fetch("http://localhost:3050/users/login", {
+        fetch("https://newsletter-with-mongo.herokuapp.com/users/login", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
