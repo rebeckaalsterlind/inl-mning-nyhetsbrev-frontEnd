@@ -16,26 +16,29 @@ const regHeadTemp = `
 <section>
     <input type="text" id="username" class="redBorder" name="username" placeholder="Username" autocomplete="on">
     <input type="password" id="password" class="redBorder" name="password" placeholder="Password" autocomplete="on">
-    <input type="submit" value="Log in" id="logInBtn" />
+    <input type="submit" value="Log in" id="logInBtn" class="button" />
 </section>`;
  const regMainTemp = `
-<form class="root" id="regForm" name="regForm">
-    <h2>Create an account</h2>
-    <div>Username <input id="regUN" type="text" name="regUN"></div>
-    <div>Firstname <input id="firstname" type="text" name="firstname"></div>
-    <div>Lastname <input id="lastname" type="text" name="lastname"></div>
-    <div>Email <input id="email" type="email" name="email"></div>
-    <div>Password <input id="regPW" type="password" name="regPW"></div>
-    <div>Subscribe to newsletter <input id="checkbox" type="checkbox" name="newsletter"></div>
-    <div><input type="button" value="Create" id="createAccount" /></div>
-</form>`;
+<section class="root" >
+    <form id="regForm" name="regForm">
+        <h2>Create an account</h2>
+        <div>Username <input id="regUN" type="text" name="regUN"></div>
+        <div>Firstname <input id="firstname" type="text" name="firstname"></div>
+        <div>Lastname <input id="lastname" type="text" name="lastname"></div>
+        <div>Email <input id="email" type="email" name="email"></div>
+        <div>Password <input id="regPW" type="password" name="regPW"></div>
+        <div>Subscribe to newsletter <input id="checkbox" type="checkbox" name="newsletter"></div>
+        <div id="centeredBtn"><input type="button" value="Create" id="createAccount" class="button" /></div>
+        <div id="error"></div>
+    </form>
+</section>`;
 
 //LOGGED OUT
-const loggedOutHeadTemp = `<div><button id="regBtn">Register</button></div>` + regHeadTemp;
-const loggedOutMainTemp = `<section class="root"><h1>log in to access your account</h1></div>`;
+const loggedOutHeadTemp = `<div><button id="regBtn" class="button">Register</button></div>` + regHeadTemp;
+const loggedOutMainTemp = `<section class="root"><h1 class="main-text">Log in to access your account</h1></div>`;
 
 //LOGGED IN
-const loggedInHeadTemp = `<button id="logOutBtn">Log out</button></div>`;
+const loggedInHeadTemp = `<button id="logOutBtn" class="button">Log out</button></div>`;
 const loggedInMainTemp = `
 <section class="root">
     <aside id="loggedInMenu">
@@ -44,9 +47,9 @@ const loggedInMainTemp = `
             <li id="messages">Messages</li>
         </ul>
     </aside> 
-    <article id="loggedInMain">
-        <h1>My account</h1>
-    </article>
+    <section id="loggedInMain">
+        <h1 class="main-text">My account</h1>
+    </section>
     <aside></aside> 
 </section`;
 
@@ -56,12 +59,13 @@ setVue();
 
 //SET VIEW BASED ON CURRENTUSER IN LS TRUE/FALSE
 function setVue() {
-    if (!localStorage.getItem("currentUser")) {
-    loggedOut()
-} else {
-    let user = JSON.parse(localStorage.getItem('currentUser'));
-    loggedIn(user.username);
-}
+    
+    if(!localStorage.getItem("currentUser")) {
+        loggedOut()
+    } else {
+        let user = JSON.parse(localStorage.getItem('currentUser'));
+        loggedIn(user.username);  
+    }
 };
 
 
@@ -105,14 +109,18 @@ function loggedIn(username) {
             })
             .then(res => res.json())
             .then(data => {
-    
-                main.innerHTML = "";
-                main.insertAdjacentHTML("beforeend", `<p>Username: ${data.username}</p>
-                    <p>Firstname: ${data.firstname}</p>
-                    <p>Lastname: ${data.lastname}</p>
-                    <p>Email: ${data.email}</p>
-                    <p>Subscribe to newletter: ${(data.subscribe) ? "<input id='checkbox' type='checkbox' checked/>" : "<input id='checkbox' type='checkbox'/>"} </p>
-                    <button id="changeSub">Save</button>`);
+                const loggedInMain = document.querySelector("#loggedInMain");
+
+                loggedInMain.innerHTML = "";
+                loggedInMain.insertAdjacentHTML("beforeend", `
+                <div class="main-wrapper">
+                    <p><span class="bold">Username: </span>${data.username}</p>
+                    <p><span class="bold">Firstname: </span>${data.firstname}</p>
+                    <p><span class="bold">Lastname: </span>${data.lastname}</p>
+                    <p><span class="bold">Email: </span>${data.email}</p>
+                    <p><span class="bold">Subscribe to newletter: </span>${(data.subscribe) ? "<input id='checkbox' type='checkbox' checked/>" : "<input id='checkbox' type='checkbox'/>"} </p>
+                    <button id="changeSub" class="button">Save</button>
+                </div>`);
 
                 document.querySelector("#changeSub").addEventListener("click", (data) => {
                     console.log("data", data)
@@ -131,10 +139,10 @@ function loggedIn(username) {
                 })
                 .then(res => res.json())
                 .then(data => {
-                    main.innerHTML = "";
+                    loggedInMain.innerHTML = "";
                     let result;
                     (data) ? result = "now" : result = "no longer";
-                    main.insertAdjacentHTML("beforeend", `<p>You are ${result} subscribing to the newsletter</p>`)
+                    loggedInMain.insertAdjacentHTML("beforeend", `<p>You are ${result} subscribing to the newsletter</p>`)
                 });
                 });
             });
@@ -151,39 +159,7 @@ function loggedOut() {
 
     document.querySelector("#regBtn").addEventListener("click", () => register());
 
-    document.querySelector("#logInBtn").addEventListener("click", () => {
-
-        let username = document.querySelector("#username").value;
-        let password = document.querySelector("#password").value;
-
-        if (username != "" || password != "") {
-
-            let checkUser = {
-                username: username,
-                password: password
-            };
-
-            fetch("http://localhost:3050/users/login", {
-                    method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(checkUser)
-                })
-                .then(res => res.json())
-                .then(data => {
-                    localStorage.setItem('currentUser', JSON.stringify(data))
-                    loggedIn(data.username);
-                });
-
-
-    } else {
-        redBorder("#password");
-        redBorder("#username");
-        
-    };
-
-    });
+    document.querySelector("#logInBtn").addEventListener("click", () => runLogIn());
 
 };
 
@@ -192,7 +168,7 @@ function register() {
     vue(regHeadTemp, regMainTemp);
 
     document.querySelector("#createAccount").addEventListener("click", (evt) => {
-
+    
         evt.preventDefault();
         let validation = true;
          
@@ -212,6 +188,8 @@ function register() {
                     password: document.querySelector("#regPW").value,
                     subscribe: document.querySelector("#checkbox").checked
                 };
+            
+                
 
             fetch("http://localhost:3050/users/createAccount", {
                 method: "post",
@@ -222,17 +200,58 @@ function register() {
              })
              .then(res => res.json())
              .then(data => {
-                 console.log(data)
-                localStorage.setItem('currentUser', JSON.stringify(data));
-                loggedIn(data.username);
+                if(data == "Email" || data == "Username") {
+                    console.log("email")
+                    document.querySelector("#error").innerHTML = `<p>${data} is unavailable</p>`;
+                }else {
+                    localStorage.setItem('currentUser', JSON.stringify(data));
+                    loggedIn(data.username);  
+                }
+                
             });  
 
         }; 
     });
+
+    document.querySelector("#logInBtn").addEventListener("click", () => runLogIn());
+
  };
 
 
  //FEATURES FUNCTIONS
+function runLogIn() {
+    let username = document.querySelector("#username").value;
+    let password = document.querySelector("#password").value;
+
+    if (username != "" || password != "") {
+
+        let checkUser = {
+            username: username,
+            password: password
+        };
+
+        fetch("http://localhost:3050/users/login", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(checkUser)
+            })
+            .then(res => res.json())
+            .then(data => {
+                localStorage.setItem('currentUser', JSON.stringify(data))
+                loggedIn(data.username);
+            });
+
+
+    } else {
+        redBorder("#password");
+        redBorder("#username");
+        
+    };
+}
+
+
 function redBorder(selector) {
     document.querySelector(selector).style.border = "1px solid red";
 } 
@@ -248,16 +267,3 @@ function validateForm(target) {
 
 
 
-
-
-
-
-
-
- // LOG IN CHECK IF USER EXISTS => SEND ID BACK
-
-
- // REG BUTTON SEND TO REG FORM
-
-
- // LOG OUT BUTTON CLEARS LS SEND TO LOG OUT PAGE    
