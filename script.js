@@ -114,8 +114,10 @@ function runLogIn() {
                 console.log("invalid")
                 document.querySelector(".root").innerHTML = `<p>${data} username or password</p>`;
             }else {
-                localStorage.setItem('currentUser', JSON.stringify(data));
-                loggedIn(data.username);  
+                if(data.username != undefined) {
+                   localStorage.setItem('currentUser', JSON.stringify(data));
+                loggedIn(data.username);    
+                }
             };
 
 
@@ -134,7 +136,7 @@ function runLogIn() {
  // IF USER IS LOGGED IN
 function loggedIn(username) {
     headerAside.innerHTML = ""
-    headerAside.insertAdjacentHTML("beforeend", `<div>${username} ` + loggedInHeadTemp);
+    headerAside.insertAdjacentHTML("beforeend", `<div id="printedName">${username} ` + loggedInHeadTemp);
 
     main.innerHTML = "";
     main.insertAdjacentHTML("beforeend", loggedInMainTemp);

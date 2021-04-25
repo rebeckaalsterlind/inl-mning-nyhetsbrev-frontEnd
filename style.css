@@ -32,6 +32,10 @@ header > section {
     padding: 4px;
 }
 
+#printedName {
+    color: rgb(187, 187, 187);
+}
+
 #logo {
     cursor: pointer;
     color:rgb(194, 143, 4);
