@@ -115,26 +115,18 @@ function runLogIn() {
         .then(data => {
 
             if(data == "Invalid") {
-                console.log("first invalid", data)
-                document.querySelector(".root").innerHTML = `<p>${data} username or password</p>`;
-            }else {
-                if(data.username != undefined) {
-                    console.log("second if undefined", data.username)
-                   localStorage.setItem('currentUser', JSON.stringify(data));
+                document.querySelector(".root").innerHTML = `<p class="red">${data} username or password</p>`;
+            }else if(data.username != undefined) {
+                localStorage.setItem('currentUser', JSON.stringify(data));
                 loggedIn(data.username);    
-                } else {
-                    console.log("last else", data)
-                }
             };
 
-
-            // localStorage.setItem('currentUser', JSON.stringify(data))
-            // loggedIn(data.username);
         });
 
-    } else {
-        redBorder("#password");
+    } else if (username == "") {
         redBorder("#username");
+    } else if(password == "") {
+        redBorder("#password");
     };
 };
 
