@@ -161,7 +161,7 @@ function loggedIn(username) {
     document.querySelector("#userDetails").addEventListener("click", () => {
        
         let user = JSON.parse(localStorage.getItem('currentUser'));
-        console.log('user', user);
+        console.log('user', user.id);
         const userId = {
             id: user.id
         }
