@@ -90,6 +90,10 @@ function loggedOut() {
 
 //CHECK IF USER IS REGISTERED
 function runLogIn() {
+
+    noBorder("#password");
+    noBorder("#username");
+
     let username = document.querySelector("#username").value;
     let password = document.querySelector("#password").value;
 
@@ -270,6 +274,11 @@ function register() {
 function redBorder(selector) {
     document.querySelector(selector).style.border = "1px solid red";
 }; 
+
+//CLEAR RED BORDER
+function noBorder(selector) {
+    document.querySelector(selector).style.border = "none";
+};
 
 //CHECK IF INPUT FIELDS ARE EMPTY
 function validateForm(target) {
