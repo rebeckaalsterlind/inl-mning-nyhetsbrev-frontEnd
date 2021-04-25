@@ -176,7 +176,7 @@ function loggedIn(username) {
         .then(res => res.json())
         .then(data => {
             //PRINT DATA
-            const loggedInMain = document.querySelector("#loggedInMain");
+            let loggedInMain = document.querySelector("#loggedInMain");
             loggedInMain.innerHTML = "";
             loggedInMain.insertAdjacentHTML("beforeend", `
             <div class="main-wrapper">
