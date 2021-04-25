@@ -23,12 +23,3 @@ change fetch in script.js =>
 replace "https://newsletter-with-mongo.herokuapp.com" with "http://localhost:3000"
 
 
-
-
-"https://newsletter-with-mongo.herokuapp.com/users/login"
-
-"https://newsletter-with-mongo.herokuapp.com/users/myAccount"
-
-"https://newsletter-with-mongo.herokuapp.com/users/newsletter"
-
-"https://newsletter-with-mongo.herokuapp.com/users/createAccount"

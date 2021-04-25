@@ -98,6 +98,9 @@ function loggedOut() {
 //CHECK IF USER IS REGISTERED
 function runLogIn() {
 
+    main.innerHTML = "";
+    main.insertAdjacentHTML("beforeend", loggedOutMainTemp);
+
     noBorder("#password");
     noBorder("#username");
 
@@ -132,7 +135,6 @@ function runLogIn() {
             }else if(data.username != undefined) {
                 localStorage.setItem('currentUser', JSON.stringify(data));
                 loggedIn(data.username); 
-                console.log('data.id', data.id);
             };
 
         });
@@ -162,11 +164,11 @@ function loggedIn(username) {
     document.querySelector("#userDetails").addEventListener("click", () => {
        
         let user = JSON.parse(localStorage.getItem('currentUser'));
-        console.log('user', user.id);
+
         const userId = {
             id: user.id
         }
-        console.log('id', userId);
+
         fetch("https://newsletter-with-mongo.herokuapp.com/users/myAccount", {
             method: "post",
             headers: {
