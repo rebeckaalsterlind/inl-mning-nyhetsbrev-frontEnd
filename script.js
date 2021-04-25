@@ -111,12 +111,15 @@ function runLogIn() {
         .then(data => {
 
             if(data == "Invalid") {
-                console.log("invalid")
+                console.log("first invalid", data)
                 document.querySelector(".root").innerHTML = `<p>${data} username or password</p>`;
             }else {
                 if(data.username != undefined) {
+                    console.log("second if undefined", data.username)
                    localStorage.setItem('currentUser', JSON.stringify(data));
                 loggedIn(data.username);    
+                } else {
+                    console.log("last else", data)
                 }
             };
 
