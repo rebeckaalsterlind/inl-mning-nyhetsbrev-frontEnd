@@ -194,7 +194,7 @@ function loggedIn(username) {
                 let user = JSON.parse(localStorage.getItem('currentUser'));
             
                 let updateNL;
-                (document.querySelector("#checkbox").checked) ? updateNL = {id: user._id, subscribe: true} : updateNL = {id: user._id, subscribe: false};
+                (document.querySelector("#checkbox").checked) ? updateNL = {id: user.id, subscribe: true} : updateNL = {id: user.id, subscribe: false};
         
                 fetch("https://newsletter-with-mongo.herokuapp.com/users/newsletter", {
                 method: "post",
