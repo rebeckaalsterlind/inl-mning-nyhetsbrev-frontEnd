@@ -114,16 +114,19 @@ function runLogIn() {
             console.log('password', password);
             redBorder("#password");
             redBorder("#username");
+            return
         } else if(username == ""){
             console.log('username', username);
             console.log('password', password);
                redBorder("#username");
-               noBorder("#password"); 
+               noBorder("#password");
+               return 
         } else if(password == "") {
             console.log('username', username);
             console.log('password', password);
             redBorder("#password");
             noBorder("#username");
+            return
         };
     } else {
         console.log('username', username);
