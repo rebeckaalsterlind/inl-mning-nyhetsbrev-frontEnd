@@ -53,6 +53,9 @@ const loggedInMainTemp = `
 
 
 
+
+
+
 //SET VUE BASED ON LOCALSTORAGE ON RELOAD/ENTER OF SITE
 setVue();
 
@@ -65,6 +68,10 @@ function setVue() {
         loggedIn(user.username);  
     }
 };
+
+
+
+
 
 
 
@@ -97,7 +104,7 @@ function runLogIn() {
     let username = document.querySelector("#username").value;
     let password = document.querySelector("#password").value;
 
-    if (username != "" || password != "") {
+    if (username != "" && password != "") {
 
         let checkUser = {
             username: username,
