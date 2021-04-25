@@ -159,12 +159,12 @@ function loggedIn(username) {
 
     //CLICK USERDETAILS => SENDS ID TO SERVER
     document.querySelector("#userDetails").addEventListener("click", () => {
-       console.log('id', id);
+       
         let user = JSON.parse(localStorage.getItem('currentUser'));
-        const id = {
+        const userId = {
             id: user.id
         }
-        
+        console.log('id', userId);
         fetch("https://newsletter-with-mongo.herokuapp.com/users/myAccount", {
             method: "post",
             headers: {
