@@ -123,13 +123,15 @@ function runLogIn() {
 
         });
 
-    } else if (username == "" && password != "") {
-        redBorder("#username");
-    } else if(password == "" && username != "") {
+    } else if (username == "") {
+        if(password == "") {
+            redBorder("#password");
+            redBorder("#username");
+        } else {
+           redBorder("#username"); 
+        }
+    } else if(password == "") {
         redBorder("#password");
-    } else {
-        redBorder("#password");
-        redBorder("#username");
     };
 };
 
