@@ -10,14 +10,14 @@ nmp i - to install dependensies
 npm start - to start the project
 nodemon start - to start the server
 
-To open in browser:
+TO OPEN IN BROWSER:
 https://rebeckaalsterlind.github.io/inl-mning-nyhetsbrev-frontEnd/
 
-Default user: 
+DEFAULT USER: 
 username: anna
 password: 12345
 
 
-To change to liveserver =>
+TO CHANGE TO LIVESERVER =>
 change fetch in script.js =>
 replace "https://newsletter-with-mongo.herokuapp.com" with "http://localhost:3000"

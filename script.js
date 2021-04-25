@@ -32,7 +32,7 @@ const regHeadTemp = `
 
 //LOGGED OUT
 const loggedOutHeadTemp = `<div><button id="regBtn" class="button">Register</button></div>` + regHeadTemp;
-const loggedOutMainTemp = `<section class="root"><h1 class="main-text">Log in to access your account</h1></div>`;
+const loggedOutMainTemp = `<section class="root"><h1 class="main-text" id="loggedOutMain">Log in to access your account</h1></div>`;
 
 //LOGGED IN
 const loggedInHeadTemp = `<button id="logOutBtn" class="button">Log out</button></div>`;
@@ -68,7 +68,6 @@ function setVue() {
 
 
 
-
 //VUE FUNCTIONS =>
 
  //VUE TEMPLATE
@@ -78,6 +77,58 @@ function vue(headTemp, mainTemp) {
     headerAside.insertAdjacentHTML("beforeend", headTemp);
     main.insertAdjacentHTML("beforeend", mainTemp);
 };
+
+
+
+
+//LOGGED OUT
+function loggedOut() {
+    vue(loggedOutHeadTemp, loggedOutMainTemp);
+    document.querySelector("#regBtn").addEventListener("click", () => register());
+    document.querySelector("#logInBtn").addEventListener("click", () => runLogIn());
+};
+
+//CHECK IF USER IS REGISTERED
+function runLogIn() {
+    let username = document.querySelector("#username").value;
+    let password = document.querySelector("#password").value;
+
+    if (username != "" || password != "") {
+
+        let checkUser = {
+            username: username,
+            password: password
+        };
+
+        fetch("https://newsletter-with-mongo.herokuapp.com/users/login", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkUser)
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            if(data == "Invalid") {
+                console.log("invalid")
+                document.querySelector(".root").innerHTML = `<p>${data} username or password</p>`;
+            }else {
+                localStorage.setItem('currentUser', JSON.stringify(data));
+                loggedIn(data.username);  
+            };
+
+
+            // localStorage.setItem('currentUser', JSON.stringify(data))
+            // loggedIn(data.username);
+        });
+
+    } else {
+        redBorder("#password");
+        redBorder("#username");
+    };
+};
+
 
 
  // IF USER IS LOGGED IN
@@ -91,8 +142,9 @@ function loggedIn(username) {
     //CLICK LOG OUT BTN => CLEARS LOCALSTORAGE
     document.querySelector("#logOutBtn").addEventListener("click", function () {
         localStorage.removeItem('currentUser');
-        loggedOut();
+        setVue();
     });
+
     //CLICK USERDETAILS => SENDS ID TO SERVER
     document.querySelector("#userDetails").addEventListener("click", () => {
        
@@ -151,13 +203,6 @@ function loggedIn(username) {
 };
 
 
-//LOGGED OUT
-function loggedOut() {
-    vue(loggedOutHeadTemp, loggedOutMainTemp);
-    document.querySelector("#regBtn").addEventListener("click", () => register());
-    document.querySelector("#logInBtn").addEventListener("click", () => runLogIn());
-};
-
 //REGISTER NEW ACCOUNT
 function register() {
     vue(regHeadTemp, regMainTemp);
@@ -214,36 +259,7 @@ function register() {
 
 //FEATURES FUNCTIONS
 
-//CHECK IF USER IS REGISTERED
-function runLogIn() {
-    let username = document.querySelector("#username").value;
-    let password = document.querySelector("#password").value;
 
-    if (username != "" || password != "") {
-
-        let checkUser = {
-            username: username,
-            password: password
-        };
-
-        fetch("https://newsletter-with-mongo.herokuapp.com/users/login", {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(checkUser)
-        })
-        .then(res => res.json())
-        .then(data => {
-            localStorage.setItem('currentUser', JSON.stringify(data))
-            loggedIn(data.username);
-        });
-
-    } else {
-        redBorder("#password");
-        redBorder("#username");
-    };
-};
 
 //GIVE INPUT FIELD RED BORDER WHEN ERROR
 function redBorder(selector) {

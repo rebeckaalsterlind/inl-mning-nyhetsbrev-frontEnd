@@ -8,6 +8,7 @@ body {
     background-color: rgb(187, 187, 187);
     font-family: 'Josefin Sans', sans-serif;
     color: rgb(66, 60, 70);
+    overflow: hidden;
 }
 
 header {
