@@ -109,7 +109,7 @@ function runLogIn() {
     if (username == "" || password == "") {
         console.log('username', username);
         console.log('password', password);
-        if (username == "" && password != "") {
+        if (username == "" && password == "") {
             console.log('username', username);
             console.log('password', password);
             redBorder("#password");
@@ -117,11 +117,13 @@ function runLogIn() {
         } else if(username == ""){
             console.log('username', username);
             console.log('password', password);
-               redBorder("#username"); 
+               redBorder("#username");
+               noBorder("#password"); 
         } else if(password == "") {
             console.log('username', username);
             console.log('password', password);
             redBorder("#password");
+            noBorder("#username");
         };
     } else {
         console.log('username', username);
