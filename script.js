@@ -171,7 +171,7 @@ function loggedIn(username) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(id)
+            body: JSON.stringify(userId)
         })
         .then(res => res.json())
         .then(data => {
