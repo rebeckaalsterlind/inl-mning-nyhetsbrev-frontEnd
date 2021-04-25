@@ -104,8 +104,19 @@ function runLogIn() {
     let username = document.querySelector("#username").value;
     let password = document.querySelector("#password").value;
 
-    if (username != "" && password != "") {
-
+    if (username == "" || password == "") {
+        if (username == "") {
+            if(password == "") {
+                redBorder("#password");
+                redBorder("#username");
+            } else {
+               redBorder("#username"); 
+            }
+        } else if(password == "") {
+            redBorder("#password");
+        };
+    } else if (username != "" && password != "") {
+        
         let checkUser = {
             username: username,
             password: password
@@ -129,18 +140,11 @@ function runLogIn() {
             };
 
         });
-
-    } else if (username == "") {
-        if(password == "") {
-            redBorder("#password");
-            redBorder("#username");
-        } else {
-           redBorder("#username"); 
-        }
-    } else if(password == "") {
-        redBorder("#password");
     };
 };
+      
+
+    
 
 
 
