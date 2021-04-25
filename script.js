@@ -97,7 +97,7 @@ function runLogIn() {
     let username = document.querySelector("#username").value;
     let password = document.querySelector("#password").value;
 
-    if (username != "" && password != "") {
+    if (username != "" || password != "") {
 
         let checkUser = {
             username: username,
@@ -123,10 +123,13 @@ function runLogIn() {
 
         });
 
-    } else if (username == "") {
+    } else if (username == "" && password != "") {
         redBorder("#username");
-    } else if(password == "") {
+    } else if(password == "" && username != "") {
         redBorder("#password");
+    } else {
+        redBorder("#password");
+        redBorder("#username");
     };
 };
 
