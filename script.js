@@ -131,7 +131,8 @@ function runLogIn() {
                 document.querySelector(".root").innerHTML = `<p class="red">${data} username or password</p>`;
             }else if(data.username != undefined) {
                 localStorage.setItem('currentUser', JSON.stringify(data));
-                loggedIn(data.username);    
+                loggedIn(data.username); 
+                console.log('data.id', data.id);
             };
 
         });
