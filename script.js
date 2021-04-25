@@ -103,8 +103,6 @@ function runLogIn() {
 
     let username = document.querySelector("#username").value;
     let password = document.querySelector("#password").value;
-    console.log('username', username);
-    console.log('password', password);
 
     if (username == "" || password == "") {
         if (username == "") {
@@ -166,7 +164,7 @@ function loggedIn(username) {
         const id = {
             id: user._id
         }
-    
+        console.log('id', id);
         fetch("https://newsletter-with-mongo.herokuapp.com/users/myAccount", {
             method: "post",
             headers: {
