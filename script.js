@@ -103,20 +103,29 @@ function runLogIn() {
 
     let username = document.querySelector("#username").value;
     let password = document.querySelector("#password").value;
+    console.log('username', username);
+    console.log('password', password);
 
     if (username == "" || password == "") {
-        if (username == "") {
-            if(password == "") {
-                redBorder("#password");
-                redBorder("#username");
-            } else {
+        console.log('username', username);
+        console.log('password', password);
+        if (username == "" && password != "") {
+            console.log('username', username);
+            console.log('password', password);
+            redBorder("#password");
+            redBorder("#username");
+        } else if(username == ""){
+            console.log('username', username);
+            console.log('password', password);
                redBorder("#username"); 
-            }
         } else if(password == "") {
+            console.log('username', username);
+            console.log('password', password);
             redBorder("#password");
         };
-    } else if (username != "" && password != "") {
-        
+    } else {
+        console.log('username', username);
+        console.log('password', password);
         let checkUser = {
             username: username,
             password: password
